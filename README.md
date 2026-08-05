@@ -23,7 +23,7 @@ published artifacts. Everything a host app needs is on this page.
 | `targetSdk` | 36 recommended | Play's target-API policy |
 | Java / JVM target | **11** | `sourceCompatibility` / `targetCompatibility` |
 | AGP / Gradle | 8.x | Gradle module metadata is required |
-| Language | Kotlin **or** Java | Both are first-class — see below |
+| Language | Kotlin **or** Java | Both call the SDK identically |
 | Android System WebView | **Chromium 111+** | Runtime requirement, see below |
 | Google Play Store | installed | Billing, and the WebView update prompt |
 
