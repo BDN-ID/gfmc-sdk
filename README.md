@@ -4,8 +4,10 @@ Maven distribution point for the GFMC SDK (`com.sltr.gfmc:gfmc-sdk`). This
 repo holds **no source code** — only the published packages, listed under
 **Packages** in the sidebar. Source is maintained privately by the BDN team.
 
-Access is by invitation: if you can read this repo, you can resolve the
-artifact.
+The package is public: no invitation, no approval, no account setup on our
+side. You do still need a GitHub token, because GitHub Packages refuses
+anonymous Maven requests even for public packages — see
+[Credentials](#credentials) below.
 
 ## Consuming the SDK
 
@@ -41,10 +43,14 @@ it yourself.
 
 ## Credentials
 
-GitHub Packages requires authentication even for reads. Create a
-**Personal access token (classic)** at
-<https://github.com/settings/tokens> with scopes `read:packages` and `repo`,
-then put it outside your project, in `~/.gradle/gradle.properties`:
+GitHub Packages requires authentication even for public packages — this is a
+registry-wide rule, not a restriction we set. Anonymous pulls exist only on
+the `ghcr.io` Docker registry.
+
+Create a **Personal access token (classic)** at
+<https://github.com/settings/tokens> with the **`read:packages`** scope —
+that's the only one needed — then put it outside your project, in
+`~/.gradle/gradle.properties`:
 
 ```properties
 gpr.user=<your github username>
@@ -52,9 +58,7 @@ gpr.key=<your token>
 ```
 
 Never inline the token in `settings.gradle.kts` — that file is committed.
-
-If BDN-ID has SAML SSO enabled, open the token's **Configure SSO** menu and
-authorize it for the organization, or every request comes back `403`.
+Any GitHub account works; membership in BDN-ID is not required.
 
 ## Host app requirements
 
@@ -87,6 +91,6 @@ for complete working wiring — `GfmcSDK.init` / `setTokenRefresher` /
 
 | Symptom | Cause |
 |---|---|
-| `401 Unauthorized` | Token missing, expired, or wrong scopes |
-| `403 Forbidden` | Not invited to this repo, or token not SSO-authorized |
-| `Could not find com.sltr.gfmc:gfmc-sdk:x.y.z` | Credentials absent — Gradle skips a repo it can't authenticate against — or that version was never published |
+| `401 Unauthorized` | Token missing, expired, or lacking `read:packages` |
+| `Could not find com.sltr.gfmc:gfmc-sdk:x.y.z` | Credentials absent — Gradle silently skips a repo it can't authenticate against — or that version was never published |
+| `NoClassDefFoundError: BillingClient` at runtime | You're consuming a raw `.aar` instead of the Maven artifact; the `.aar` carries no dependency metadata. Use the coordinate above |
