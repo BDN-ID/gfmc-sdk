@@ -15,8 +15,13 @@
 
 <h1>GFMC SDK — Maven repository</h1>
 
-<p>This host serves the GFMC SDK as a static Maven repository. No account and
-no token are required. Artifacts only — the SDK source is not published here.</p>
+<p>This branch is a static Maven repository for the GFMC SDK. No account and no
+token are required. Artifacts only — the SDK source is not published here.</p>
+
+<p>The repository URL below points at <code>raw.githubusercontent.com</code>,
+which serves this branch today. If GitHub Pages is enabled for the repo later,
+<code>https://bdn-id.github.io/gfmc-sdk/</code> will serve the identical tree
+and this page will be its index.</p>
 
 <h2>Use it</h2>
 
@@ -25,7 +30,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven { url = uri("https://bdn-id.github.io/gfmc-sdk/") }
+        maven { url = uri("https://raw.githubusercontent.com/BDN-ID/gfmc-sdk/gh-pages/") }
     }
 }
 
