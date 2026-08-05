@@ -149,23 +149,6 @@ later `open()` launches faster. Call it once at app start.
 
 ---
 
-## API
-
-| Call | Purpose |
-|---|---|
-| `init(context)` / `init(context, environment, enableLogging)` / `init(context, config)` | Configure and register bridges. Also prewarms the hub |
-| `open(context, jwt)` | Launch the hub |
-| `open(context, jwt, onSku)` | Launch, registering a SKU listener in one call |
-| `openWithTokenProvider(context, jwt, provider)` | Launch with a *synchronous* refresh callback |
-| `setTokenRefresher(refresher)` | How to fetch a fresh JWT when the current one expires |
-| `setSkuListener(listener)` | Fires when the user picks a product, before purchase starts |
-| `setListener(context, listener)` | Lifecycle, error and purchase callbacks |
-| `prewarmMiniProgram(context)` | Re-warm the hub process after the system killed it |
-| `version` | Structured SDK version (`GfmcSDKVersion`) |
-
-`GfmcSDKConfig.Builder`: `setEnvironment`, `setLocale`, `setTheme`,
-`enableLogging`, `setConnectionTimeout`.
-
 
 ## Versioning
 
