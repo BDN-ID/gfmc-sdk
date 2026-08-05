@@ -4,10 +4,9 @@ Maven distribution point for the GFMC SDK (`com.sltr.gfmc:gfmc-sdk`). This
 repo holds **no source code** — only the published packages, listed under
 **Packages** in the sidebar. Source is maintained privately by the BDN team.
 
-The package is public: no invitation, no approval, no account setup on our
-side. You do still need a GitHub token, because GitHub Packages refuses
-anonymous Maven requests even for public packages — see
-[Credentials](#credentials) below.
+No invitation, no token, no account. The `gh-pages` branch of this repo *is*
+a Maven repository — a Maven repository is just a directory tree — so Gradle
+can read it directly over plain HTTPS.
 
 ## Consuming the SDK
 
@@ -17,15 +16,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven {
-            url = uri("https://maven.pkg.github.com/BDN-ID/gfmc-sdk")
-            credentials {
-                username = providers.gradleProperty("gpr.user").orNull
-                    ?: System.getenv("GITHUB_ACTOR")
-                password = providers.gradleProperty("gpr.key").orNull
-                    ?: System.getenv("GITHUB_TOKEN")
-            }
-        }
+        maven { url = uri("https://raw.githubusercontent.com/BDN-ID/gfmc-sdk/gh-pages/") }
     }
 }
 ```
@@ -37,28 +28,43 @@ dependencies {
 }
 ```
 
-Google Play Billing (`com.android.billingclient:billing-ktx`) is declared in
-the artifact's Gradle module metadata and resolves automatically — don't add
-it yourself.
+Keep `google()` and `mavenCentral()` in the list. Only the SDK comes from the
+URL above; Google Play Billing
+(`com.android.billingclient:billing-ktx`) resolves from `google()`
+automatically because it's declared in this artifact's Gradle module
+metadata — don't add it yourself.
 
-## Credentials
+Published versions are listed in
+[`maven-metadata.xml`](https://raw.githubusercontent.com/BDN-ID/gfmc-sdk/gh-pages/com/sltr/gfmc/gfmc-sdk/maven-metadata.xml).
 
-GitHub Packages requires authentication even for public packages — this is a
-registry-wide rule, not a restriction we set. Anonymous pulls exist only on
-the `ghcr.io` Docker registry.
+## If your network blocks raw.githubusercontent.com
+
+The same artifacts are also published to the GitHub Packages registry. That
+route needs a token — GitHub's Maven registry refuses anonymous requests even
+for public packages, which is a registry-wide rule rather than a restriction
+we set. Anonymous pulls exist only on the `ghcr.io` Docker registry.
+
+```kotlin
+maven {
+    url = uri("https://maven.pkg.github.com/BDN-ID/gfmc-sdk")
+    credentials {
+        username = providers.gradleProperty("gpr.user").orNull
+        password = providers.gradleProperty("gpr.key").orNull
+    }
+}
+```
 
 Create a **Personal access token (classic)** at
-<https://github.com/settings/tokens> with the **`read:packages`** scope —
-that's the only one needed — then put it outside your project, in
-`~/.gradle/gradle.properties`:
+<https://github.com/settings/tokens> with the **`read:packages`** scope, then
+put it in `~/.gradle/gradle.properties`, outside your project:
 
 ```properties
 gpr.user=<your github username>
 gpr.key=<your token>
 ```
 
-Never inline the token in `settings.gradle.kts` — that file is committed.
-Any GitHub account works; membership in BDN-ID is not required.
+Never inline the token in `settings.gradle.kts` — that file is committed. Any
+GitHub account works; membership in BDN-ID is not required.
 
 ## Host app requirements
 
@@ -91,6 +97,8 @@ for complete working wiring — `GfmcSDK.init` / `setTokenRefresher` /
 
 | Symptom | Cause |
 |---|---|
-| `401 Unauthorized` | Token missing, expired, or lacking `read:packages` |
-| `Could not find com.sltr.gfmc:gfmc-sdk:x.y.z` | Credentials absent — Gradle silently skips a repo it can't authenticate against — or that version was never published |
-| `NoClassDefFoundError: BillingClient` at runtime | You're consuming a raw `.aar` instead of the Maven artifact; the `.aar` carries no dependency metadata. Use the coordinate above |
+| `Could not find com.sltr.gfmc:gfmc-sdk:x.y.z` | Trailing slash missing from the repository URL, that version was never published, or your network blocks `raw.githubusercontent.com` |
+| `Could not resolve com.android.billingclient:billing-ktx` | `google()` is missing from your repositories — only the SDK itself comes from the BDN URL |
+| `NoClassDefFoundError: BillingClient` at runtime | You're consuming a raw `.aar` instead of the Maven artifact; an `.aar` carries no dependency metadata, so Billing is never resolved. Use the coordinate above |
+| A newly announced version isn't found | `raw.githubusercontent.com` caches branch content for a few minutes. Retry shortly |
+| `401 Unauthorized` | Only applies to the GitHub Packages route: token missing, expired, or lacking `read:packages` |
