@@ -190,10 +190,11 @@ made by those accounts aren't charged.
 The artifact version and the SDK version are separate sequences. The SDK
 version is what `GfmcSDK.version` reports at runtime.
 
-| Artifact | SDK |
-|---|---|
-| `1.2.2` | 2.3.2 |
-| `1.2.1` | 2.3.1 |
-| `1.2.0` | 2.3.0 |
+| Artifact | SDK | |
+|---|---|---|
+| `1.2.3` | 2.3.3 | `GfmcSDKEnv.STAGING` renamed to `SANDBOX` |
+| `1.2.2` | 2.3.2 | |
+| `1.2.1` | 2.3.1 | |
+| `1.2.0` | 2.3.0 | |
 
 Release notes are distributed by the BDN team with each version.
