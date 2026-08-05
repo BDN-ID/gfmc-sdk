@@ -24,7 +24,7 @@ dependencyResolutionManagement {
 ```kotlin
 // app/build.gradle.kts
 dependencies {
-    implementation("com.sltr.gfmc:gfmc-sdk:1.2.0")
+    implementation("com.sltr.gfmc:gfmc-sdk:1.2.1")
 }
 ```
 
@@ -33,6 +33,23 @@ URL above; Google Play Billing
 (`com.android.billingclient:billing-ktx`) resolves from `google()`
 automatically because it's declared in this artifact's Gradle module
 metadata — don't add it yourself.
+
+## Java host apps
+
+The API is `@JvmStatic` as of **1.2.1**, so Java reads the same as Kotlin:
+
+```java
+GfmcSDK.init(this);
+GfmcSDK.setTokenRefresher(result -> result.emit(myAuth.freshJwt()));
+GfmcSDK.setSkuListener(sku -> Log.d("Sku", sku));
+GfmcSDK.open(this, jwt);
+```
+
+On **1.2.0**, `GfmcSDK.init(this)` does not compile from Java — *"Non-static
+method 'init(android.content.Context)' cannot be referenced from a static
+context"*. `GfmcSDK` is a Kotlin `object`, whose members Java sees on a hidden
+`INSTANCE` field. Either upgrade, or call `GfmcSDK.INSTANCE.init(this)`, which
+keeps working on every version.
 
 Published versions are listed in
 [`maven-metadata.xml`](https://raw.githubusercontent.com/BDN-ID/gfmc-sdk/gh-pages/com/sltr/gfmc/gfmc-sdk/maven-metadata.xml).
