@@ -10,7 +10,7 @@ inside it never takes down your app.
 This repo is the distribution point. It carries **no source code** — only
 published artifacts. Everything a host app needs is on this page.
 
-**Current release: `1.2.2`** (SDK 2.3.2)
+**Current release: `1.2.3`** (SDK 2.3.3)
 
 ---
 
@@ -74,7 +74,7 @@ dependencyResolutionManagement {
 ```kotlin
 // app/build.gradle.kts
 dependencies {
-    implementation("com.sltr.gfmc:gfmc-sdk:1.2.2")
+    implementation("com.sltr.gfmc:gfmc-sdk:1.2.3")
 }
 ```
 
@@ -155,20 +155,20 @@ change that:
 ```kotlin
 // Kotlin
 GfmcSDK.init(context)                       // production (default)
-GfmcSDK.init(context, GfmcSDKEnv.STAGING)   // staging
+GfmcSDK.init(context, GfmcSDKEnv.SANDBOX)   // sandbox
 ```
 
 ```java
 // Java
 GfmcSDK.init(this);
-GfmcSDK.init(this, GfmcSDKEnv.STAGING);
+GfmcSDK.init(this, GfmcSDKEnv.SANDBOX);
 ```
 
 A third argument turns on logging — worth having while you integrate. It
 writes to logcat under the tag `GfmcSDK`:
 
 ```kotlin
-GfmcSDK.init(context, GfmcSDKEnv.STAGING, true)
+GfmcSDK.init(context, GfmcSDKEnv.SANDBOX, true)
 ```
 
 > The environment is also what selects the hub host. That split isn't live
