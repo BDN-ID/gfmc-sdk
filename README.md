@@ -147,29 +147,6 @@ GfmcSDK.open(this, jwt);
 `init()` also prewarms the hub's WebView engine in the background, so the
 later `open()` launches faster. Call it once at app start.
 
-### Kotlin and Java are equivalent
-
-Every entry point is `@JvmStatic` and every callback is a `fun interface`, so
-Java needs no casts, no wrappers and no `INSTANCE`. The only multi-method
-callback is `GfmcSDKListener`, and all seven of its methods default to
-no-ops — override just the ones you care about:
-
-```java
-GfmcSDK.setListener(this, new GfmcSDKListener() {
-    @Override
-    public void onError(GfmcSDKError code, String message) {
-        Log.e("Gfmc", code + ": " + message);
-    }
-});
-```
-
-> **Upgrading from an older version?** On **1.2.0**, `GfmcSDK.init(this)`
-> does not compile from Java — *"Non-static method
-> 'init(android.content.Context)' cannot be referenced from a static
-> context"*. Use `GfmcSDK.INSTANCE.init(this)`, or upgrade. On **1.2.1 and
-> earlier**, the synchronous refresh form was an `open()` overload; it is now
-> `openWithTokenProvider()`.
-
 ### Auto-init without any code
 
 Instead of calling `init()` yourself, declare meta-data in your app's
@@ -180,6 +157,19 @@ Instead of calling `init()` yourself, declare meta-data in your app's
 <meta-data android:name="GfmcSDK.locale"      android:value="id" />
 <meta-data android:name="GfmcSDK.logging"     android:value="false" />
 ```
+
+All three are optional, and each falls back to a sensible value read from
+your build:
+
+| Entry | Omitted |
+|---|---|
+| `GfmcSDK.environment` | `STAGING` for a debuggable build, `PRODUCTION` otherwise |
+| `GfmcSDK.locale` | The device language, or `id` |
+| `GfmcSDK.logging` | Follows the build's debuggable flag |
+
+So the SDK auto-initializes even with no meta-data at all. Declare an entry
+only where you want to override the default — most often
+`GfmcSDK.environment`, to keep a debuggable build pointed at production.
 
 A manual `init()` can still run later — the most recent config wins.
 
