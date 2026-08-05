@@ -24,7 +24,7 @@ dependencyResolutionManagement {
 ```kotlin
 // app/build.gradle.kts
 dependencies {
-    implementation("com.sltr.gfmc:gfmc-sdk:1.2.1")
+    implementation("com.sltr.gfmc:gfmc-sdk:1.2.2")
 }
 ```
 
@@ -34,22 +34,45 @@ URL above; Google Play Billing
 automatically because it's declared in this artifact's Gradle module
 metadata — don't add it yourself.
 
-## Java host apps
+## Kotlin and Java
 
-The API is `@JvmStatic` as of **1.2.1**, so Java reads the same as Kotlin:
+Both languages call the SDK the same way. Java needs no casts, no wrappers,
+and no `INSTANCE`.
 
-```java
-GfmcSDK.init(this);
-GfmcSDK.setTokenRefresher(result -> result.emit(myAuth.freshJwt()));
-GfmcSDK.setSkuListener(sku -> Log.d("Sku", sku));
-GfmcSDK.open(this, jwt);
+```kotlin
+// Kotlin
+GfmcSDK.init(context)
+GfmcSDK.setTokenRefresher { result -> result.emit(auth.freshJwt()) }
+GfmcSDK.setSkuListener { sku -> Log.d("Sku", sku) }
+GfmcSDK.open(context, jwt)
+GfmcSDK.openWithTokenProvider(context, jwt) { auth.freshJwt() }
 ```
 
-On **1.2.0**, `GfmcSDK.init(this)` does not compile from Java — *"Non-static
-method 'init(android.content.Context)' cannot be referenced from a static
-context"*. `GfmcSDK` is a Kotlin `object`, whose members Java sees on a hidden
-`INSTANCE` field. Either upgrade, or call `GfmcSDK.INSTANCE.init(this)`, which
-keeps working on every version.
+```java
+// Java
+GfmcSDK.init(this);
+GfmcSDK.setTokenRefresher(result -> result.emit(auth.freshJwt()));
+GfmcSDK.setSkuListener(sku -> Log.d("Sku", sku));
+GfmcSDK.open(this, jwt);
+GfmcSDK.openWithTokenProvider(this, jwt, () -> auth.freshJwt());
+```
+
+`GfmcSDKListener` has seven methods, but every one defaults to a no-op — a
+Java host overrides only what it needs.
+
+Two notes if you're upgrading rather than starting fresh:
+
+- **On 1.2.0**, `GfmcSDK.init(this)` doesn't compile from Java at all —
+  *"Non-static method 'init(android.content.Context)' cannot be referenced
+  from a static context"*. `GfmcSDK` is a Kotlin `object`, whose members Java
+  sees on a hidden `INSTANCE` field. `GfmcSDK.INSTANCE.init(this)` works
+  around it and keeps working on every version.
+- **Before 1.2.2**, the synchronous refresh form was an `open()` overload.
+  It's now `openWithTokenProvider(context, jwt, provider)` — as a third
+  `open()` overload it collided with `open(context, jwt, onSku)`, and neither
+  compiler can pick between two single-abstract-method parameters given a
+  bare lambda. `open(context, jwt)` and `open(context, jwt, onSku)` did not
+  change.
 
 Published versions are listed in
 [`maven-metadata.xml`](https://raw.githubusercontent.com/BDN-ID/gfmc-sdk/gh-pages/com/sltr/gfmc/gfmc-sdk/maven-metadata.xml).
