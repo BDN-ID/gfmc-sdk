@@ -147,6 +147,43 @@ GfmcSDK.open(this, jwt);
 `init()` also prewarms the hub's WebView engine in the background, so the
 later `open()` launches faster. Call it once at app start.
 
+### Environment
+
+`init(context)` runs against **production**. Pass an environment explicitly to
+change that:
+
+```kotlin
+// Kotlin
+GfmcSDK.init(context)                       // production (default)
+GfmcSDK.init(context, GfmcSDKEnv.STAGING)   // staging
+GfmcSDK.init(context, GfmcSDKEnv.DEV)       // dev
+```
+
+```java
+// Java
+GfmcSDK.init(this);
+GfmcSDK.init(this, GfmcSDKEnv.STAGING);
+GfmcSDK.init(this, GfmcSDKEnv.DEV);
+```
+
+A third argument turns on logging — worth having while you integrate. It
+writes to logcat under the tag `GfmcSDK`:
+
+```kotlin
+GfmcSDK.init(context, GfmcSDKEnv.STAGING, true)
+```
+
+> The environment is also what selects the hub host. That split isn't live
+> yet — all three values currently resolve to the same host — so today the
+> choice records intent rather than changing the backend you reach. Wire your
+> build to pass the right value now and it will start taking effect without a
+> change on your side.
+
+Test purchases are a separate matter, and not something the SDK controls.
+Google decides that from the Play Console: add the tester's account under
+**Setup → License testing**, and install the app from a Play track. Purchases
+made by those accounts aren't charged.
+
 ---
 
 
