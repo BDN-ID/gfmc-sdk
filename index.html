@@ -1,0 +1,63 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>GFMC SDK — Maven repository</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 16px/1.6 system-ui, sans-serif; max-width: 46rem; margin: 3rem auto; padding: 0 1.25rem; }
+  pre { background: rgba(128,128,128,.12); padding: 1rem; border-radius: .5rem; overflow-x: auto; }
+  code { font-size: .9em; }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.1rem; margin-top: 2rem; }
+  table { border-collapse: collapse; width: 100%; }
+  td, th { text-align: left; padding: .4rem .6rem; border-bottom: 1px solid rgba(128,128,128,.3); }
+</style>
+
+<h1>GFMC SDK — Maven repository</h1>
+
+<p>This host serves the GFMC SDK as a static Maven repository. No account and
+no token are required. Artifacts only — the SDK source is not published here.</p>
+
+<h2>Use it</h2>
+
+<pre><code>// settings.gradle.kts
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://bdn-id.github.io/gfmc-sdk/") }
+    }
+}
+
+// app/build.gradle.kts
+dependencies {
+    implementation("com.sltr.gfmc:gfmc-sdk:1.2.0")
+}</code></pre>
+
+<p>Google Play Billing resolves automatically from <code>google()</code> — it is
+declared in this artifact's Gradle module metadata, so do not add it yourself.
+Keep <code>google()</code> and <code>mavenCentral()</code> in the list; only the
+SDK itself comes from here.</p>
+
+<h2>Host app requirements</h2>
+
+<table>
+  <tr><th>Item</th><th>Minimum</th></tr>
+  <tr><td><code>minSdk</code></td><td>24 (Android 7.0)</td></tr>
+  <tr><td><code>compileSdk</code></td><td>36</td></tr>
+  <tr><td>Java / JVM target</td><td>11</td></tr>
+  <tr><td>AGP / Gradle</td><td>8.x</td></tr>
+  <tr><td>Android System WebView</td><td>Chromium 111+</td></tr>
+  <tr><td>Google Play Store</td><td>installed</td></tr>
+</table>
+
+<p>The WebView floor is a runtime requirement that the Android version does not
+imply — WebView updates as its own APK. Below Chromium 111 the SDK blocks the
+load and shows an update prompt rather than rendering an unstyled page.</p>
+
+<h2>Links</h2>
+
+<ul>
+  <li><a href="https://github.com/BDN-ID/gfmc-sdk">Distribution repo</a> — integration notes, troubleshooting</li>
+  <li><a href="com/sltr/gfmc/gfmc-sdk/maven-metadata.xml">maven-metadata.xml</a> — published versions</li>
+</ul>
