@@ -156,14 +156,12 @@ change that:
 // Kotlin
 GfmcSDK.init(context)                       // production (default)
 GfmcSDK.init(context, GfmcSDKEnv.STAGING)   // staging
-GfmcSDK.init(context, GfmcSDKEnv.DEV)       // dev
 ```
 
 ```java
 // Java
 GfmcSDK.init(this);
 GfmcSDK.init(this, GfmcSDKEnv.STAGING);
-GfmcSDK.init(this, GfmcSDKEnv.DEV);
 ```
 
 A third argument turns on logging — worth having while you integrate. It
@@ -174,9 +172,9 @@ GfmcSDK.init(context, GfmcSDKEnv.STAGING, true)
 ```
 
 > The environment is also what selects the hub host. That split isn't live
-> yet — all three values currently resolve to the same host — so today the
-> choice records intent rather than changing the backend you reach. Wire your
-> build to pass the right value now and it will start taking effect without a
+> yet — both values currently resolve to the same host — so today the choice
+> records intent rather than changing the backend you reach. Wire your build
+> to pass the right value now and it will start taking effect without a
 > change on your side.
 
 Test purchases are a separate matter, and not something the SDK controls.
