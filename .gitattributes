@@ -1,0 +1,3 @@
+# Maven artifacts are served byte-for-byte and checksummed. Any EOL
+# conversion would invalidate the .sha256/.sha1 files sitting next to them.
+* -text
