@@ -147,32 +147,6 @@ GfmcSDK.open(this, jwt);
 `init()` also prewarms the hub's WebView engine in the background, so the
 later `open()` launches faster. Call it once at app start.
 
-### Auto-init without any code
-
-Instead of calling `init()` yourself, declare meta-data in your app's
-`AndroidManifest.xml` and the SDK initializes before `Application.onCreate()`:
-
-```xml
-<meta-data android:name="GfmcSDK.environment" android:value="PRODUCTION" />
-<meta-data android:name="GfmcSDK.locale"      android:value="id" />
-<meta-data android:name="GfmcSDK.logging"     android:value="false" />
-```
-
-All three are optional, and each falls back to a sensible value read from
-your build:
-
-| Entry | Omitted |
-|---|---|
-| `GfmcSDK.environment` | `STAGING` for a debuggable build, `PRODUCTION` otherwise |
-| `GfmcSDK.locale` | The device language, or `id` |
-| `GfmcSDK.logging` | Follows the build's debuggable flag |
-
-So the SDK auto-initializes even with no meta-data at all. Declare an entry
-only where you want to override the default — most often
-`GfmcSDK.environment`, to keep a debuggable build pointed at production.
-
-A manual `init()` can still run later — the most recent config wins.
-
 ---
 
 ## API
