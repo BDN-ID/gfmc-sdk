@@ -1,0 +1,83 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.sltr.gfmc",
+    "module": "gfmc-sdk",
+    "version": "1.2.4",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "9.1.0"
+    }
+  },
+  "variants": [
+    {
+      "name": "releaseVariantReleaseApiPublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-api"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.2.10"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "gfmc-sdk-1.2.4.aar",
+          "url": "gfmc-sdk-1.2.4.aar",
+          "size": 127685,
+          "sha512": "0920f97d6c3247fb3c9f9e77d3236e2bc1221bef9505adab5ba072a6794197c404fdb32da35769d6ede2d6a01e2e3b75ab15bfcb1c3f9c21529b5bc8828f456d",
+          "sha256": "9230002451050fbfbbcddcdbed41daa603168a64497e6e4ff07d5da6f283985d",
+          "sha1": "e3299bb72cf7730ad205a5cb4234596647822e29",
+          "md5": "ca8488d25158f88ce4e22814141acf3c"
+        }
+      ]
+    },
+    {
+      "name": "releaseVariantReleaseRuntimePublication",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.libraryelements": "aar",
+        "org.gradle.usage": "java-runtime"
+      },
+      "dependencies": [
+        {
+          "group": "com.android.billingclient",
+          "module": "billing-ktx",
+          "version": {
+            "requires": "7.1.1"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib",
+          "version": {
+            "requires": "2.2.10"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "gfmc-sdk-1.2.4.aar",
+          "url": "gfmc-sdk-1.2.4.aar",
+          "size": 127685,
+          "sha512": "0920f97d6c3247fb3c9f9e77d3236e2bc1221bef9505adab5ba072a6794197c404fdb32da35769d6ede2d6a01e2e3b75ab15bfcb1c3f9c21529b5bc8828f456d",
+          "sha256": "9230002451050fbfbbcddcdbed41daa603168a64497e6e4ff07d5da6f283985d",
+          "sha1": "e3299bb72cf7730ad205a5cb4234596647822e29",
+          "md5": "ca8488d25158f88ce4e22814141acf3c"
+        }
+      ]
+    }
+  ]
+}
