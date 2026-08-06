@@ -10,7 +10,7 @@ inside it never takes down your app.
 This repo is the distribution point. It carries **no source code** — only
 published artifacts. Everything a host app needs is on this page.
 
-**Current release: `1.2.3`** (SDK 2.3.3)
+**Current release: `1.2.6`** (SDK 2.3.6)
 
 ---
 
@@ -74,7 +74,7 @@ dependencyResolutionManagement {
 ```kotlin
 // app/build.gradle.kts
 dependencies {
-    implementation("com.sltr.gfmc:gfmc-sdk:1.2.3")
+    implementation("com.sltr.gfmc:gfmc-sdk:1.2.6")
 }
 ```
 
@@ -192,6 +192,9 @@ version is what `GfmcSDK.version` reports at runtime.
 
 | Artifact | SDK | |
 |---|---|---|
+| `1.2.6` | 2.3.6 | Capsule "more" menu: Share item removed, all native UI defaults to English, new `GET_APP_VERSION` bridge action, redesigned About dialog |
+| `1.2.5` | 2.3.5 | Recovers from WebView renderer-process crashes (`onRenderProcessGone`) instead of a permanent blank/gray screen |
+| `1.2.4` | 2.3.4 | Fixed `isMiniProgramProcess()`'s API-level guard, which silently disabled `init()`/warmup on every Android 9–12 cold start |
 | `1.2.3` | 2.3.3 | `GfmcSDKEnv.STAGING` renamed to `SANDBOX` |
 | `1.2.2` | 2.3.2 | |
 | `1.2.1` | 2.3.1 | |
