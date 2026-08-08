@@ -10,7 +10,27 @@ inside it never takes down your app.
 This repo is the distribution point. It carries **no source code** — only
 published artifacts. Everything a host app needs is on this page.
 
-**Current release: `1.2.6`** (SDK 2.3.6)
+**Current release: `1.2.7`** (SDK 2.3.7)
+
+> ### ⚠️ Use `GfmcSDKEnv.SANDBOX` on 1.2.7
+>
+> In this release `GfmcSDKEnv.PRODUCTION` resolves to
+> `https://stream.minicinema.id/`, and that hostname **has no DNS record yet**
+> (verified `NXDOMAIN` when 1.2.7 was published). Opening the hub on
+> `PRODUCTION` fails with `GfmcSDKError.NETWORK_ERROR`.
+>
+> `GfmcSDK.init(context)` **defaults to `PRODUCTION`**, so the one-line quick
+> start below hits this unless you pass an environment. Pass `SANDBOX`
+> explicitly:
+>
+> ```kotlin
+> GfmcSDK.init(context, GfmcSDKEnv.SANDBOX)
+> ```
+>
+> `SANDBOX` and `DEV` both resolve to `stream-dev.minicinema.id`, which is
+> live and serves the same hub. Switch to `PRODUCTION` once BDN confirms the
+> domain is up — no other code change is needed. Staying on `1.2.6` is also
+> fine: it shipped with `PRODUCTION` still pointed at the working host.
 
 ---
 
@@ -74,7 +94,7 @@ dependencyResolutionManagement {
 ```kotlin
 // app/build.gradle.kts
 dependencies {
-    implementation("com.sltr.gfmc:gfmc-sdk:1.2.6")
+    implementation("com.sltr.gfmc:gfmc-sdk:1.2.7")
 }
 ```
 
@@ -89,8 +109,14 @@ Published versions are listed in
 <details>
 <summary>Alternative: GitHub Packages registry (needs a token)</summary>
 
-The same artifacts are also published to the GitHub Packages registry. Use
-this only if your network blocks `raw.githubusercontent.com`.
+Older artifacts are also published to the GitHub Packages registry. Use this
+only if your network blocks `raw.githubusercontent.com`.
+
+> **`1.2.7` is not on the registry** — only on `gh-pages` above. The registry
+> mirror is best-effort and can lag; `gh-pages` is the source of truth for
+> what has actually shipped. Check
+> [`maven-metadata.xml`](https://raw.githubusercontent.com/BDN-ID/gfmc-sdk/gh-pages/com/sltr/gfmc/gfmc-sdk/maven-metadata.xml)
+> rather than the registry's package list.
 
 ```kotlin
 maven {
@@ -154,7 +180,7 @@ change that:
 
 ```kotlin
 // Kotlin
-GfmcSDK.init(context)                       // production (default)
+GfmcSDK.init(context)                       // production (default) — see the warning below
 GfmcSDK.init(context, GfmcSDKEnv.SANDBOX)   // sandbox
 ```
 
@@ -164,6 +190,10 @@ GfmcSDK.init(this);
 GfmcSDK.init(this, GfmcSDKEnv.SANDBOX);
 ```
 
+> **On 1.2.7, pass `SANDBOX`.** The default `PRODUCTION` now points at
+> `stream.minicinema.id`, which has no DNS record yet — every hub open on it
+> returns `NETWORK_ERROR`. See the warning at the top of this page.
+
 A third argument turns on logging — worth having while you integrate. It
 writes to logcat under the tag `GfmcSDK`:
 
@@ -171,11 +201,11 @@ writes to logcat under the tag `GfmcSDK`:
 GfmcSDK.init(context, GfmcSDKEnv.SANDBOX, true)
 ```
 
-> The environment is also what selects the hub host. That split isn't live
-> yet — both values currently resolve to the same host — so today the choice
-> records intent rather than changing the backend you reach. Wire your build
-> to pass the right value now and it will start taking effect without a
-> change on your side.
+> The environment selects the hub host. Up to and including `1.2.6` both
+> values resolved to the same host, so the choice only recorded intent. **From
+> `1.2.7` the split is real**: `PRODUCTION` → `stream.minicinema.id`,
+> `SANDBOX`/`DEV` → `stream-dev.minicinema.id`. Only the second of those is
+> currently reachable.
 
 Test purchases are a separate matter, and not something the SDK controls.
 Google decides that from the Play Console: add the tester's account under
@@ -192,6 +222,7 @@ version is what `GfmcSDK.version` reports at runtime.
 
 | Artifact | SDK | |
 |---|---|---|
+| `1.2.7` | 2.3.7 | Hub's first render is authenticated — the session JWT is seeded into the WebView cookie jar before the first navigation, cutting ~2.6s of boot that was spent fetching a token the host already held. Immersive hub + `SET_FULLSCREEN` bridge action. **`PRODUCTION` moved to `stream.minicinema.id`, not yet in DNS — use `SANDBOX`** |
 | `1.2.6` | 2.3.6 | Capsule "more" menu: Share item removed, all native UI defaults to English, new `GET_APP_VERSION` bridge action, redesigned About dialog |
 | `1.2.5` | 2.3.5 | Recovers from WebView renderer-process crashes (`onRenderProcessGone`) instead of a permanent blank/gray screen |
 | `1.2.4` | 2.3.4 | Fixed `isMiniProgramProcess()`'s API-level guard, which silently disabled `init()`/warmup on every Android 9–12 cold start |
