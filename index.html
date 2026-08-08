@@ -45,14 +45,13 @@ dependencies {
 
 <div class="warn">
   <p><strong>On 1.2.7, initialise with <code>GfmcSDKEnv.SANDBOX</code>.</strong></p>
-  <p>This release moves <code>GfmcSDKEnv.PRODUCTION</code> to
-  <code>stream.minicinema.id</code>, which has no DNS record yet — opening the
-  hub on it fails with <code>NETWORK_ERROR</code>. <code>GfmcSDK.init(context)</code>
-  defaults to <code>PRODUCTION</code>, so pass the environment explicitly:</p>
+  <p>In this release the <code>PRODUCTION</code> host is not reachable yet —
+  opening the hub on it fails with <code>NETWORK_ERROR</code>.
+  <code>GfmcSDK.init(context)</code> defaults to <code>PRODUCTION</code>, so
+  pass the environment explicitly:</p>
   <pre><code>GfmcSDK.init(context, GfmcSDKEnv.SANDBOX)</code></pre>
-  <p><code>SANDBOX</code> and <code>DEV</code> both resolve to
-  <code>stream-dev.minicinema.id</code>, which serves the same hub. Switch to
-  <code>PRODUCTION</code> once BDN confirms the domain is live — nothing else
+  <p><code>SANDBOX</code> and <code>DEV</code> are live and serve the same hub.
+  Switch to <code>PRODUCTION</code> once BDN confirms it is up — nothing else
   changes.</p>
 </div>
 
