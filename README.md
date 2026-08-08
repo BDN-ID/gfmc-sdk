@@ -106,14 +106,15 @@ Published versions are listed in
 <details>
 <summary>Alternative: GitHub Packages registry (needs a token)</summary>
 
-Older artifacts are also published to the GitHub Packages registry. Use this
+The artifacts are also published to the GitHub Packages registry. Use this
 only if your network blocks `raw.githubusercontent.com`.
 
-> **`1.2.7` is not on the registry** — only on `gh-pages` above. The registry
-> mirror is best-effort and can lag; `gh-pages` is the source of truth for
-> what has actually shipped. Check
+> **The registry is an incomplete mirror.** It is published best-effort and
+> has gaps — `1.2.4` and `1.2.5` were never uploaded to it, for instance.
+> `gh-pages` is the source of truth for what has actually shipped, so check
 > [`maven-metadata.xml`](https://raw.githubusercontent.com/BDN-ID/gfmc-sdk/gh-pages/com/sltr/gfmc/gfmc-sdk/maven-metadata.xml)
-> rather than the registry's package list.
+> rather than the registry's package list, and prefer the `gh-pages`
+> repository unless you specifically cannot reach it.
 
 ```kotlin
 maven {
