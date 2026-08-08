@@ -14,10 +14,8 @@ published artifacts. Everything a host app needs is on this page.
 
 > ### ⚠️ Use `GfmcSDKEnv.SANDBOX` on 1.2.7
 >
-> In this release `GfmcSDKEnv.PRODUCTION` resolves to
-> `https://stream.minicinema.id/`, and that hostname **has no DNS record yet**
-> (verified `NXDOMAIN` when 1.2.7 was published). Opening the hub on
-> `PRODUCTION` fails with `GfmcSDKError.NETWORK_ERROR`.
+> In this release the `PRODUCTION` host is **not reachable yet** — opening the
+> hub on it fails with `GfmcSDKError.NETWORK_ERROR`.
 >
 > `GfmcSDK.init(context)` **defaults to `PRODUCTION`**, so the one-line quick
 > start below hits this unless you pass an environment. Pass `SANDBOX`
@@ -27,10 +25,9 @@ published artifacts. Everything a host app needs is on this page.
 > GfmcSDK.init(context, GfmcSDKEnv.SANDBOX)
 > ```
 >
-> `SANDBOX` and `DEV` both resolve to `stream-dev.minicinema.id`, which is
-> live and serves the same hub. Switch to `PRODUCTION` once BDN confirms the
-> domain is up — no other code change is needed. Staying on `1.2.6` is also
-> fine: it shipped with `PRODUCTION` still pointed at the working host.
+> `SANDBOX` and `DEV` are live and serve the same hub. Switch to `PRODUCTION`
+> once BDN confirms it is up — no other code change is needed. Staying on
+> `1.2.6` is also fine: every environment was reachable on that release.
 
 ---
 
@@ -190,9 +187,9 @@ GfmcSDK.init(this);
 GfmcSDK.init(this, GfmcSDKEnv.SANDBOX);
 ```
 
-> **On 1.2.7, pass `SANDBOX`.** The default `PRODUCTION` now points at
-> `stream.minicinema.id`, which has no DNS record yet — every hub open on it
-> returns `NETWORK_ERROR`. See the warning at the top of this page.
+> **On 1.2.7, pass `SANDBOX`.** The default `PRODUCTION` host is not reachable
+> yet — every hub open on it returns `NETWORK_ERROR`. See the warning at the
+> top of this page.
 
 A third argument turns on logging — worth having while you integrate. It
 writes to logcat under the tag `GfmcSDK`:
@@ -201,11 +198,10 @@ writes to logcat under the tag `GfmcSDK`:
 GfmcSDK.init(context, GfmcSDKEnv.SANDBOX, true)
 ```
 
-> The environment selects the hub host. Up to and including `1.2.6` both
-> values resolved to the same host, so the choice only recorded intent. **From
-> `1.2.7` the split is real**: `PRODUCTION` → `stream.minicinema.id`,
-> `SANDBOX`/`DEV` → `stream-dev.minicinema.id`. Only the second of those is
-> currently reachable.
+> The environment selects the hub host. Up to and including `1.2.6` every
+> value resolved to the same host, so the choice only recorded intent. **From
+> `1.2.7` the split is real** — `PRODUCTION` and `SANDBOX`/`DEV` are separate
+> hosts, and only the latter is currently reachable.
 
 Test purchases are a separate matter, and not something the SDK controls.
 Google decides that from the Play Console: add the tester's account under
@@ -222,7 +218,7 @@ version is what `GfmcSDK.version` reports at runtime.
 
 | Artifact | SDK | |
 |---|---|---|
-| `1.2.7` | 2.3.7 | Hub's first render is authenticated — the session JWT is seeded into the WebView cookie jar before the first navigation, cutting ~2.6s of boot that was spent fetching a token the host already held. Immersive hub + `SET_FULLSCREEN` bridge action. **`PRODUCTION` moved to `stream.minicinema.id`, not yet in DNS — use `SANDBOX`** |
+| `1.2.7` | 2.3.7 | Hub's first render is authenticated — the session JWT is seeded into the WebView cookie jar before the first navigation, cutting ~2.6s of boot that was spent fetching a token the host already held. Immersive hub + `SET_FULLSCREEN` bridge action. **`PRODUCTION` host not reachable yet — use `SANDBOX`** |
 | `1.2.6` | 2.3.6 | Capsule "more" menu: Share item removed, all native UI defaults to English, new `GET_APP_VERSION` bridge action, redesigned About dialog |
 | `1.2.5` | 2.3.5 | Recovers from WebView renderer-process crashes (`onRenderProcessGone`) instead of a permanent blank/gray screen |
 | `1.2.4` | 2.3.4 | Fixed `isMiniProgramProcess()`'s API-level guard, which silently disabled `init()`/warmup on every Android 9–12 cold start |
