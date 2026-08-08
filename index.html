@@ -11,6 +11,10 @@
   h2 { font-size: 1.1rem; margin-top: 2rem; }
   table { border-collapse: collapse; width: 100%; }
   td, th { text-align: left; padding: .4rem .6rem; border-bottom: 1px solid rgba(128,128,128,.3); }
+  .warn { border-left: 4px solid #d97706; background: rgba(217,119,6,.10);
+          padding: .85rem 1rem; border-radius: 0 .4rem .4rem 0; margin: 1.75rem 0; }
+  .warn > :first-child { margin-top: 0; }
+  .warn > :last-child { margin-bottom: 0; }
 </style>
 
 <h1>GFMC SDK — Maven repository</h1>
@@ -36,8 +40,21 @@ dependencyResolutionManagement {
 
 // app/build.gradle.kts
 dependencies {
-    implementation("com.sltr.gfmc:gfmc-sdk:1.2.0")
+    implementation("com.sltr.gfmc:gfmc-sdk:1.2.7")
 }</code></pre>
+
+<div class="warn">
+  <p><strong>On 1.2.7, initialise with <code>GfmcSDKEnv.SANDBOX</code>.</strong></p>
+  <p>This release moves <code>GfmcSDKEnv.PRODUCTION</code> to
+  <code>stream.minicinema.id</code>, which has no DNS record yet — opening the
+  hub on it fails with <code>NETWORK_ERROR</code>. <code>GfmcSDK.init(context)</code>
+  defaults to <code>PRODUCTION</code>, so pass the environment explicitly:</p>
+  <pre><code>GfmcSDK.init(context, GfmcSDKEnv.SANDBOX)</code></pre>
+  <p><code>SANDBOX</code> and <code>DEV</code> both resolve to
+  <code>stream-dev.minicinema.id</code>, which serves the same hub. Switch to
+  <code>PRODUCTION</code> once BDN confirms the domain is live — nothing else
+  changes.</p>
+</div>
 
 <p>Google Play Billing resolves automatically from <code>google()</code> — it is
 declared in this artifact's Gradle module metadata, so do not add it yourself.
