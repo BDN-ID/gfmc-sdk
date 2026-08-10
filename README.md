@@ -10,9 +10,9 @@ inside it never takes down your app.
 This repo is the distribution point. It carries **no source code** — only
 published artifacts. Everything a host app needs is on this page.
 
-**Current release: `1.2.8`** (SDK 2.3.8)
+**Current release: `1.2.9`** (SDK 2.3.9)
 
-> ### ⚠️ Use `GfmcSDKEnv.SANDBOX` on 1.2.8
+> ### ⚠️ Use `GfmcSDKEnv.SANDBOX` on 1.2.9
 >
 > In this release the `PRODUCTION` host is **not reachable yet** — opening the
 > hub on it fails with `GfmcSDKError.NETWORK_ERROR`.
@@ -91,7 +91,7 @@ dependencyResolutionManagement {
 ```kotlin
 // app/build.gradle.kts
 dependencies {
-    implementation("com.sltr.gfmc:gfmc-sdk:1.2.8")
+    implementation("com.sltr.gfmc:gfmc-sdk:1.2.9")
 }
 ```
 
@@ -188,7 +188,7 @@ GfmcSDK.init(this);
 GfmcSDK.init(this, GfmcSDKEnv.SANDBOX);
 ```
 
-> **On 1.2.8, pass `SANDBOX`.** The default `PRODUCTION` host is not reachable
+> **On 1.2.9, pass `SANDBOX`.** The default `PRODUCTION` host is not reachable
 > yet — every hub open on it returns `NETWORK_ERROR`. See the warning at the
 > top of this page.
 
@@ -219,6 +219,7 @@ version is what `GfmcSDK.version` reports at runtime.
 
 | Artifact | SDK | |
 |---|---|---|
+| `1.2.9` | 2.3.9 | `REFRESH_TOKEN` bridge round-trip timeout raised 15s → 32s — a host whose refresh chain does two auth-server calls could see a slow-but-working refresh reported as a dead session under the old budget. **`PRODUCTION` host not reachable yet — use `SANDBOX`** |
 | `1.2.8` | 2.3.8 | Closing the hub no longer clears the HTTP cache — hashed Next.js chunks, posters and video segments now survive across sessions. Freshness moves to a new `WEB_BUILD_INFO` bridge action the web calls at boot. **`PRODUCTION` host not reachable yet — use `SANDBOX`** |
 | `1.2.7` | 2.3.7 | Hub's first render is authenticated — the session JWT is seeded into the WebView cookie jar before the first navigation, cutting ~2.6s of boot that was spent fetching a token the host already held. Immersive hub + `SET_FULLSCREEN` bridge action. **`PRODUCTION` host not reachable yet — use `SANDBOX`** |
 | `1.2.6` | 2.3.6 | Capsule "more" menu: Share item removed, all native UI defaults to English, new `GET_APP_VERSION` bridge action, redesigned About dialog |
